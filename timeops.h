@@ -24,11 +24,10 @@ time_t makeArmTime(const char * alarm_string) {
 	}
 	
 	time_t now = time(0);
-	
 	tm *time_then = localtime(&now);
 	
 	// Must have minute, hour by this stage
-    time_then->tm_sec = SS;
+        time_then->tm_sec = SS;
 	time_then->tm_min = MM;
 	time_then->tm_hour = HH;
 

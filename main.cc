@@ -8,9 +8,7 @@
 
 #define APPID "getup"
 
-
 using namespace std;
-
 
 int main (int argc, char ** argv) {
 
@@ -27,10 +25,10 @@ int main (int argc, char ** argv) {
     }
 
     //Adding
-	time_t now = time(0);
+    time_t now = time(0);
     time_t then = makeArmTime(ah->time);
 
-	cout << "now:\t" << ctime(&now) << flush;
+    cout << "now:\t" << ctime(&now) << flush;
     cout << "then:\t" << ctime(&then) << flush;
 
     int seconds_till = difftime(then, now);
