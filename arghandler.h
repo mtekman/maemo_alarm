@@ -5,6 +5,8 @@
 #include <iostream>
 #include <stdio.h>
 
+#include "recur.h"
+
 //Main-Args
 #define silent_arg "--silent"
 #define sound_arg "--sound="
@@ -13,28 +15,7 @@
 #define icon_arg "--icon="
 
 
-//Recur-Args
-#define weekday_arg "--weekday="
-#define monthday_arg "--monthday="
-#define hour_arg "--hour="
-#define min_arg "--min="
-
 #define target " alarum"
-
-using namespace std;
-
-
-class Recur{
-public:
-    //Arg map
-    /*
-    map <char *, int > arg_map = {
-     {"sun",0},{"mon",1},{"tue",2},
-     {"wed",3},{"thu",4},{"fri",5},{"sat",6}
-    };
-    */
-    Recur (){}; // to implement
-};
 
 class ArgHandler{
 public:
@@ -54,7 +35,13 @@ public:
         sound = command = "";
         message = "Wakey wakey!";
         icon = "/usr/share/icons/default/cursors/trek";
-        recr = 0;
+
+	//Recur defaults stored in empty object
+	// weekday_recur = -1
+	// monthday_arg = -1
+	// hour_arg = -1
+	// min_arg = -1
+        recr = new Recur();
 
         parseArgs();
 //        printMainOpts();
@@ -78,10 +65,7 @@ private:
 
         string first = argv[1];
 
-        if (first=="list"){
-            list=  true;
-            return 0;
-        }
+        if (first=="list"){list=true;return 0;}
         if (first=="delete"){
             if (argc<3) usage();
             deleting = true;
@@ -111,6 +95,17 @@ private:
                 else if (arg.find(command_arg)!=-1) command = past_equals;
                 else if (arg.find(message_arg)!=-1) message = past_equals;
                 else if (arg.find(icon_arg)!=-1) icon = past_equals;
+
+		//Pass recur args to class
+		else if (arg.find(weekday_arg)!=-1)
+			recr->weekday= past_equals;
+		else if (arg.find(monthday_arg)!=-1)
+			recr->monthday=atoi(past_equals);
+		else if (arg.find(hour_arg)!=-1)
+			recr->hour=atoi(past_equals);
+		else if (arg.find(min_arg)!=-1)
+			recr->minute=atoi(past_equals);
+
                 else {
                     cerr << "Uh.. could not parse: " << argv[i] << endl;
                     exit(-1);
@@ -123,7 +118,7 @@ private:
 
     void usage(){
         cerr << "usage:" << endl;
-        cerr <<  target  << " set <TIME> [OPTS] [RECUR]" << endl;
+        cerr <<  target  << " set <TIME> [OPTS] [RECUR OPTS]" << endl;
         cerr << "    or " << " list" << endl;
         cerr << "    or " << " delete <cookie_id>" << endl;
         cerr << endl;
@@ -138,11 +133,12 @@ private:
         cerr << message_arg << "\"S\"\tset message to S" << endl;
         cerr << icon_arg << "\"T\"\tset icon to T" << endl;
         cerr << endl;
-        cerr << "where RECUR:" << endl;
-        cerr << weekday_arg << "sun,mon,.." << endl;
+        cerr << "where RECUR OPTS:" << endl;
+        cerr << weekday_arg << "sun,mon,.. " << endl;
         cerr << monthday_arg << "0,..,31" << endl;
         cerr << hour_arg << "0,..,23" << endl;
         cerr << min_arg << "0,..,59" << endl;
+	// NO UNTIL arg, just delete the cookie
         exit(-1);
     }
 };

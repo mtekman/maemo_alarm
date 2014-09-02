@@ -4,4 +4,4 @@ target=alarum
 lib="-lalarm"
 extra="${@:1}"
 
-g++ -o $target main.cc timeops.h alarmcookie.h arghandler.h $lib $extra
+g++ -o $target main.cc timeops.h alarmcookie.h arghandler.h recur.h $lib $extra
